@@ -1,0 +1,14 @@
+node_modules
+.env
+dist
+dist-ssr
+*.local
+# Archivos del sistema o editores
+.DS_Store
+*.log
+*.swp
+*.tmp
+
+# Archivos de compilación adicionales
+build/
+out/
