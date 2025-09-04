@@ -136,7 +136,7 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // 🚀 Inicio del servidor
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+const port = process.env.PORT || 4000 
+app.listen(port, () => {
+  console.log(`Servidor corriendo en puerto ${port}`);
 });
