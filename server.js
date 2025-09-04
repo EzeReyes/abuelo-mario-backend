@@ -9,7 +9,7 @@ const app = express();
 
 // 🛡️ CORS configurado para desarrollo local
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://abuelomario.com.ar',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));
