@@ -2,19 +2,59 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
-
+import { ApolloServer } from '@apollo/server';
 dotenv.config();
+import typeDefs  from './db/schema.js';
+import resolvers from './db/resolver.js';
+import http from 'http';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import conectarDB from './config/db.js';
+import { expressMiddleware } from '@as-integrations/express5';
+
+conectarDB();
+
 
 const app = express();
 
-// 🛡️ CORS configurado para desarrollo local
-app.use(cors({
-  origin: 'https://abuelomario.com.ar',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
-}));
+const httpServer = http.createServer(app);
 
-app.use(express.json());
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+});
+
+  // Iniciar el servidor Apollo
+await server.start();
+
+// Middlewares globales
+const allowedOrigins = [
+  'http://localhost:4000',
+  'http://localhost:5173',
+  'https://abuelomario.com.ar',
+  'https://abuelo-mario-backend.onrender.com'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log(`❌ CORS bloqueado para origen: ${origin}`);
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+  app.use(express.json()); // 👈 en lugar de express.json()
+
+
+app.use(
+  '/graphql',
+  expressMiddleware(server)
+);
 
 // 📬 Configuración del transporte SMTP
 const transporter = nodemailer.createTransport({
@@ -135,8 +175,7 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// 🚀 Inicio del servidor
-const port = process.env.PORT || 4000 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en puerto ${port}`);
+const port = process.env.PORT || 4000;
+httpServer.listen(port, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${port}/graphql`);
 });
