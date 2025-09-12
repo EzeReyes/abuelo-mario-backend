@@ -32,7 +32,9 @@ const allowedOrigins = [
   'http://localhost:4000',
   'http://localhost:5173',
   'https://abuelomario.com.ar',
-  'https://abuelo-mario-backend.onrender.com'
+  'https://abuelo-mario-backend.onrender.com',
+  'https://abuelo-mario-backend.onrender.com/api/contact',
+  'https://abuelo-mario-backend.onrender.com/graphql'
 ];
 
 app.use(cors({
