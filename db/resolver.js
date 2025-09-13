@@ -18,6 +18,14 @@ const resolvers = {
             } catch(error) {
                 console.log(error);
             }
+        },
+        obtenerProducto: async (_, {id}) => {
+            try {
+            const producto = await Product.findById(id);
+            return producto;
+            } catch(error) {
+                console.log(error);
+            }
         }
     },
     Mutation: {
