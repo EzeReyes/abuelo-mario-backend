@@ -60,6 +60,8 @@ app.use(
 
 // 📬 Configuración del transporte SMTP
 const transporter = nodemailer.createTransport({
+  port: 465,
+  secure: true,
   service: 'gmail', // ✅ Esto simplifica el uso de Gmail
   auth: {
     user: process.env.GMAIL_USER, // tu dirección Gmail
