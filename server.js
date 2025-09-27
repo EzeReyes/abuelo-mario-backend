@@ -30,7 +30,7 @@ await server.start();
 // Middlewares globales
 const allowedOrigins = [
   'http://localhost:4000',
-  'http://localhost:5173',
+  'http://localhost:5174',
   'https://abuelomario.com.ar',
   'https://abuelo-mario-backend.onrender.com',
   'https://abuelo-mario-backend.onrender.com/api/contact',
@@ -172,7 +172,7 @@ app.post('/api/contact', async (req, res) => {
     await transporter.sendMail(autoReplyOptions);
     return res.status(200).json({ success: true, message: 'Mensaje y auto respuesta enviados con éxito' });
   } catch (error) {
-    console.error('Error al enviar el mensaje o la auto respuesta:', error);
+    console.log('Error al enviar el mensaje o la auto respuesta:', error);
     return res.status(500).json({ success: false, message: 'Error al enviar el mensaje o la auto respuesta' });
   }
 });
