@@ -11,20 +11,39 @@ const resolvers = {
                 console.log(error)
             }
         },
-        obtenerProductos: async () => {
+        obtenerProductos: async (_, { page = 1, limit = 10 }) => {
             try {
-            const productos = await Product.find({});
-            return productos;
-            } catch(error) {
-                console.log(error);
+            const skip = (page - 1) * limit;
+
+            // 🔹 Solo seleccionamos los campos necesarios para la vista general
+            const productos = await Product.find({}, 'nombre precio imagen stock')
+                .skip(skip)
+                .limit(limit)
+                .lean();
+
+            // 🔹 Conteo total para paginación
+            const total = await Product.countDocuments();
+
+            return {
+                productos,
+                total,
+                paginas: Math.ceil(total / limit),
+                paginaActual: page
+            };
+            } catch (error) {
+            console.error("Error al obtener productos:", error);
+            throw new Error("Error al obtener productos");
             }
         },
-        obtenerProducto: async (_, {id}) => {
+        obtenerProducto: async (_, { id }) => {
             try {
-            const producto = await Product.findById(id);
+            // 🔹 findById + .lean() (más rápido que devolver documento de Mongoose)
+            const producto = await Product.findById(id).lean();
+            if (!producto) throw new Error("Producto no encontrado");
             return producto;
-            } catch(error) {
-                console.log(error);
+            } catch (error) {
+            console.error("Error al obtener producto:", error);
+            throw new Error("Error al obtener producto");
             }
         }
     },
