@@ -13,6 +13,7 @@ const typeDefs = gql`
 
     type Product {
         id: ID
+        idString: String
         name: String
         description: String
         tipo: TipoProducto

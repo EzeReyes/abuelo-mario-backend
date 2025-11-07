@@ -26,6 +26,9 @@ const ProductSchema = mongoose.Schema({
     },
     imagen: {
         type: String
+    },
+    idString: {
+        type: String
     }
 });
 

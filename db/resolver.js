@@ -5,7 +5,7 @@ const resolvers = {
     Query: {
         obtenerMensajes: async () => {
             try {
-            const mensaje = await Message.find({})
+            const mensaje = await Message.find()
              return mensaje;
             } catch(error) {
                 console.log(error)
@@ -13,7 +13,7 @@ const resolvers = {
         },
         obtenerProductos: async () => {
             try {
-            const productos = await Product.find({}).lean();
+            const productos = await Product.find().lean();
             return productos;
             } catch(error) {
                 console.log(error);
